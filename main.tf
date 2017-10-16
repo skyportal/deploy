@@ -51,7 +51,7 @@ resource "aws_elb" "skyportal-elb" {
     unhealthy_threshold = 2
     timeout             = 3
     interval            = 30
-    target              = "HTTP:${var.server_port}/"
+    target              = "TCP:22"
   }
 
   connection_draining = true
@@ -60,18 +60,20 @@ resource "aws_elb" "skyportal-elb" {
 }
 
 resource "aws_launch_configuration" "instance" {
-  image_id = "ami-560c3836"
-  instance_type = "t2.micro"
-  key_name = "${aws_key_pair.stefanv.key_name}"
-  security_groups = ["${aws_security_group.skyportal-ssh.id}",
-                     "${aws_security_group.skyportal-instance.id}"]
+  name_prefix = "webserver-"
 
-  user_data = <<-EOF
-              #!/bin/bash
-              mkdir -p /home/www_root
-              cd /home/www_root
-              python3 -m http.server "${var.server_port}" &
-              EOF
+  ## This is the Debian (9, Stretch) AMI, but it does not yet
+  ## support Python 3.6
+  #image_id = "ami-560c3836"
+
+  # For now, use the AWS Lambda image
+  # https://aws.amazon.com/amazon-linux-ami/
+  image_id = "ami-02eada62"
+
+  instance_type = "t2.micro"
+  key_name = "skyportal-deploy"
+  security_groups = ["${aws_security_group.ssh.id}",
+                     "${aws_security_group.webserver.id}"]
 
   lifecycle {
     create_before_destroy = true
@@ -95,13 +97,8 @@ resource "aws_autoscaling_group" "skyportal" {
   }
 }
 
-resource "aws_key_pair" "stefanv" {
-  key_name   = "stefanv-key"
-  public_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCz/wX8V/z5DKoBRqHBUJO6um/KJIV6OsGzTSXEJLyPmVOKyxW+sbSvlm9uwXN10Fl/qO6f6UI91sKkAMKA4qIJuPVxr4/lVRm7fA/gDd+3V5+C2J+p414ssJGT1WPNAUv48akiCiq0yQ7H0enRXgy0666ZFE5qhpEDxboSCxqoBPUjAVwRqQARdLyziVOIK754ixl9I1S9uaWsha/BKH0aezG/S0OZw07SNuVKwWcYxsEHrurO9a34bh299/KhySTMmTMzctg8/Bs7Q+yKMchwQT0gYR1fsO6g3RgHxjhxM//NxQYxqWLlOdDc32ag3RNKGtui2+SIvWxauIsQR3Tf stefan@shinobi"
-}
-
-resource "aws_security_group" "skyportal-instance" {
-  name = "instance"
+resource "aws_security_group" "webserver" {
+  name = "webserver"
 
   ingress {
     from_port   = "${var.server_port}"
@@ -117,6 +114,13 @@ resource "aws_security_group" "skyportal-instance" {
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
+  egress {
+    from_port   = "443"
+    to_port     = "443"
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
 
   lifecycle {
     create_before_destroy = true
@@ -147,8 +151,8 @@ resource "aws_security_group" "skyportal-elb" {
 
 }
 
-resource "aws_security_group" "skyportal-ssh" {
-  name = "skyportal-ssh"
+resource "aws_security_group" "ssh" {
+  name = "ssh"
 
   ingress {
     from_port   = 22
