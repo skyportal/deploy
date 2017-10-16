@@ -13,3 +13,5 @@ ssh -i "skyportal-deploy.pem" ec2-user@public-dns-name.amazonaws.com
 - Debian
 
 ssh -i skyportal-deploy.pem admin@public-dns-name.amazonaws.com
+
+The certificate can be downloaded from the EC2 console.

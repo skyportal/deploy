@@ -1,0 +1,6 @@
+*~
+.terraform
+*.retry
+skyportal-deploy.pem
+*.backup
+*.tfstate

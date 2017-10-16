@@ -1,0 +1,11 @@
+---
+- hosts: tag_Name_skyportal_asg
+  tasks:
+    - name: Ping hosts
+      ping:
+
+    - shell: /usr/bin/uptime
+      register: result
+
+    - debug:
+        var: result.stdout
