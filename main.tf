@@ -171,6 +171,19 @@ resource "aws_security_group" "ssh" {
   }
 }
 
+# resource "aws_db_instance" "db" {
+#   allocated_storage    = 5
+#   storage_type         = "gp2"
+#   engine               = "postgres"
+#   engine_version       = "9.6"
+#   instance_class       = "db.t1.micro"
+#   name                 = "skyportal"
+#   username             = "skyportal"
+#   password             = ""
+#   db_subnet_group_name = "${aws_db_subnet_group.default.name}"
+#   parameter_group_name = "${aws_db_parameter_group.default.name}"
+# }
+
 output "elb_dns_name" {
   value = "${aws_elb.skyportal-elb.dns_name}"
 }
