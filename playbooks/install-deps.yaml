@@ -2,8 +2,24 @@
 - hosts: tag_Name_skyportal_asg
   tasks:
     - name: Install packaged dependencies
+      become: true
       yum:
         name:
-          - python36
-          - python36-virtualenv
-          - python36-pip
+          - docker
+          - git
+
+    - name: Ensure Docker is running
+      become: true
+      service: name=docker state=started enabled=yes
+
+    - name: Allow ec2-user to run `docker` without being root
+      become: true
+      user:
+        name: ec2-user
+        groups: docker
+        append: yes
+
+    - name: Install Docker-compose
+      pip:
+        name: docker-compose
+        extra_args: --user
