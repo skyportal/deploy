@@ -41,9 +41,9 @@ resource "aws_elb" "skyportal-elb" {
 
   listener {
     lb_port = 80
-    lb_protocol = "http"
+    lb_protocol = "tcp"
     instance_port = "${var.server_port}"
-    instance_protocol = "http"
+    instance_protocol = "tcp"
   }
 
   health_check {
@@ -57,6 +57,11 @@ resource "aws_elb" "skyportal-elb" {
   connection_draining = true
   connection_draining_timeout = 400
   cross_zone_load_balancing = true
+}
+
+resource "aws_proxy_protocol_policy" "websocket" {
+  load_balancer  = "${aws_elb.skyportal-elb.name}"
+  instance_ports = ["8080"]
 }
 
 resource "aws_launch_configuration" "instance" {
