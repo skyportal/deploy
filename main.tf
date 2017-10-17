@@ -1,6 +1,6 @@
 variable "server_port" {
   description = "The port the server will use for HTTP requests"
-  default = "8080"
+  default = "9001"
 }
 
 variable "elb_cname" {
@@ -61,7 +61,7 @@ resource "aws_elb" "skyportal-elb" {
 
 resource "aws_proxy_protocol_policy" "websocket" {
   load_balancer  = "${aws_elb.skyportal-elb.name}"
-  instance_ports = ["8080"]
+  instance_ports = ["${var.server_port}"]
 }
 
 resource "aws_launch_configuration" "instance" {
