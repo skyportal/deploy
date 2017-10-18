@@ -1,5 +1,5 @@
 ---
-- hosts: tag_Name_skyportal_asg
+- hosts: "{{ variable_host | default('tag_Name_skyportal_asg')}}"
   tasks:
     - name: Install packaged dependencies
       become: true
