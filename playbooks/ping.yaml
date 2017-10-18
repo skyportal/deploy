@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: "{{ variable_host | default('all')}}"
   tasks:
     - name: Ping hosts
       ping:

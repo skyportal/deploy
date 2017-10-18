@@ -36,6 +36,12 @@ the key ID and value, mentioned above.
 
 ## Ansible notes
 
+- Launch an Ansible playbook: `ansible-playbook playbooks/ping.yaml`
+
+- Launch on a specific instance:
+  ``ansible-playbook --extra-vars="variable_host=tag_Name_skyportal_asg" \
+      playbooks/deploy-app.yaml``
+
 - Tag names with dashes are converted to underscores.  I.e., use
   `tag_Name_skyportal_asg`, even if `ec2_tag_Name == 'skyportal-asg'`.
 
@@ -48,3 +54,7 @@ the key ID and value, mentioned above.
 - Debian
 
 `ssh -i skyportal-deploy.pem admin@public-dns-name.amazonaws.com`
+
+## AWS Notes
+
+- The user data script output is logged to `/var/log/cloud-init-output.log`.

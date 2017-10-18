@@ -83,6 +83,19 @@ resource "aws_launch_configuration" "instance" {
   lifecycle {
     create_before_destroy = true
   }
+
+
+  user_data = <<EOF
+    #!/bin/bash
+    yum -y update
+    yum install -y git
+    pip install ansible
+    export PATH=$PATH:/usr/local/bin
+    export ANSIBLE_PULL="ansible-pull -U https://github.com/skyportal/deploy \
+                         --extra-vars=\"variable_host=localhost\" -i \"localhost,\""
+    $ANSIBLE_PULL playbooks/install-deps.yaml
+    $ANSIBLE_PULL playbooks/deploy-app.yaml
+  EOF
 }
 
 resource "aws_autoscaling_group" "skyportal" {
