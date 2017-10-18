@@ -36,6 +36,10 @@ the key ID and value, mentioned above.
 
 ## Ansible notes
 
+- Install Ansible using `pip install ansible`.  On Debian systems, you
+  may have to edit `ansible` and `ansible-playbook`, which currently
+  points to invalid Python binaries `/usr/local/bin/python3.6`.
+
 - Launch an Ansible playbook: `ansible-playbook playbooks/ping.yaml`
 
 - Launch on a specific instance:
