@@ -1,0 +1,12 @@
+---
+- hosts: tag_Name_skyportal_asg
+  tasks:
+    - name: Load template data
+      shell: |
+        docker exec -t $(docker ps -f 'name=web' -n1 -q) /bin/bash -c '
+        cd /skyportal
+        source /skyportal_env/bin/activate
+        PYTHONPATH=. python skyportal/model_util.py --config docker.yaml
+        '
+      args:
+        executable: /bin/bash
