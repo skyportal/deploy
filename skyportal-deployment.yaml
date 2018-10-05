@@ -1,0 +1,65 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: skyportal-deployment
+  labels:
+    app: skyportal-web
+    release: v0.0
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: skyportal-web
+        release: v0.0
+    spec:
+      hostname: db
+
+      volumes:
+      - name: config
+        configMap:
+          name: skyportal-config
+
+      containers:
+        - name: web
+          image: skyportal/web:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 5000
+          env:
+          - name: PYTHONPATH
+            value: "."
+          - name: FLAGS
+            value: "--config=/etc/skyportal/config.yaml"
+          args:
+          - /bin/bash
+          - -c
+          - |
+            source /skyportal_env/bin/activate && \
+            (make log &) && \
+            baselayer/tools/env_summary.py ${FLAGS} && \
+            supervisord -c baselayer/conf/supervisor/supervisor.conf
+          volumeMounts:
+          - name: config
+            mountPath: /etc/skyportal/
+            readOnly: true
+          livenessProbe:
+            tcpSocket:
+              port: 5000
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+        - name: postgres
+          image: postgres:9.6
+          env:
+          - name: POSTGRES_USER
+            value: skyportal
+          - name: POSTGRES_PASSWORD
+            value: ""
+          - name: POSTGRES_DB
+            value: skyportal

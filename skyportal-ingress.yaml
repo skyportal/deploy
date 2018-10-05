@@ -1,0 +1,8 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: skyportal-ingress
+spec:
+  backend:
+    serviceName: skyportal-service
+    servicePort: 80
