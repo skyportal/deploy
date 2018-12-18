@@ -3,6 +3,14 @@ kind: Ingress
 metadata:
   name: skyportal-ingress
 spec:
+  # rules:
+  # - host: alpha.skyportal.io
+  #   http:
+  #     paths:
+  #       - path: /
+  #         backend:
+  #           serviceName: web
+  #           servicePort: 80
   backend:
-    serviceName: skyportal-service
+    serviceName: web
     servicePort: 80

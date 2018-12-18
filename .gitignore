@@ -1,3 +1,6 @@
+# Don't commit our secrets
+config-secret.yaml
+
 *~
 .terraform
 *.retry

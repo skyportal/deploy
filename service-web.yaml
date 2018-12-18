@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: skyportal-service
+  name: web
   labels:
-    app: skyportal-web
+    app: web
     release: v0.0
 spec:
   type: LoadBalancer
   selector:
-    app: skyportal-web
+    app: frontend
     release: v0.0
   ports:
     - name: http
