@@ -1,0 +1,16 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: skyportal-ingress
+spec:
+  # rules:
+  # - host: alpha.skyportal.io
+  #   http:
+  #     paths:
+  #       - path: /
+  #         backend:
+  #           serviceName: web
+  #           servicePort: 80
+  backend:
+    serviceName: web
+    servicePort: 80

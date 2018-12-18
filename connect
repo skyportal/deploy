@@ -1,3 +1,0 @@
-# SSH into host on EC2
-
-ssh -i skyportal-deploy.pem ec2-user@$1
