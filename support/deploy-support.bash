@@ -2,4 +2,4 @@
 set -euo pipefail
 
 helm dep up
-helm upgrade --install --namespace=support --wait support .
+helm upgrade --install --namespace=support --timeout=60 support .
