@@ -24,8 +24,7 @@ spec:
 
       containers:
         - name: frontend
-          #image: acrellin/skyportalweb:ztfdemo
-          image: acrellin/skyportalweb:ztfdemo_source_numbering
+          image: skyportal/web:latest
           imagePullPolicy: Always
           ports:
             - containerPort: 5000

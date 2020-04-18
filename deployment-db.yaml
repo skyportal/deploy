@@ -23,6 +23,6 @@ spec:
           - name: POSTGRES_USER
             value: skyportal
           - name: POSTGRES_PASSWORD
-            value: ""
+            value: password
           - name: POSTGRES_DB
             value: skyportal
