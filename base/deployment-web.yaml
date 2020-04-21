@@ -24,7 +24,7 @@ spec:
 
       containers:
         - name: frontend
-          image: skyportal/web:latest
+          image: "gcr.io/PROJECT_ID/IMAGE:TAG"
           imagePullPolicy: Always
           ports:
             - containerPort: 5000
