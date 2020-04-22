@@ -40,7 +40,7 @@ spec:
             source /skyportal_env/bin/activate && \
             (make log &) && \
             baselayer/tools/env_summary.py ${FLAGS} && \
-            supervisord -c baselayer/conf/supervisor/supervisor.conf
+            make run_production
           volumeMounts:
           - name: config
             mountPath: /etc/skyportal/
