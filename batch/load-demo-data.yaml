@@ -1,12 +1,11 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: load-demo-data
+  name: load-demo-data-${TIMESTAMP}
 spec:
-  backoffLimit: 0 # number of retries before throwing error
   template:
     spec:
-      restartPolicy: OnFailure
+      restartPolicy: Never
       volumes:
       - name: config
         secret:
